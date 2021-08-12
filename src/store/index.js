@@ -14,8 +14,8 @@ export default new Vuex.Store({
   },
   getters: {
     // Propiedades computadas
-    productsCount() {
-      // TODO: Implementar
+    availableProducts(state, getters) {
+      return state.products.filter((product) => product.inventory > 0);
     }
   },
   actions: {
