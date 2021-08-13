@@ -2,6 +2,9 @@
 import Vuex from "vuex";
 import Vue from "vue";
 
+// 2. Importando la API simulada
+import shop from "@/api/shop";
+
 // 2. Registrando VUEX en VUE
 Vue.use(Vuex);
 
@@ -20,8 +23,13 @@ export default new Vuex.Store({
   },
   actions: {
     // Métodos
-    fetchProducts() {
-      // TODO: Implementar
+    fetchProducts(context) {
+      // Realizando la petición de los productos
+      shop.getProducts((products) => {
+        // Comitiando los datos recolectados
+        // store.commit(<mutation>, <payload>)
+        context.commit("setProducts", products);
+      });
     }
   },
   mutations: {

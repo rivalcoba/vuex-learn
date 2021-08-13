@@ -10,8 +10,6 @@
 </template>
 
 <script>
-// 2. Importando la API simulada
-import shop from "@/api/shop";
 // Importando el store
 import store from "@/store/index";
 
@@ -22,12 +20,9 @@ export default {
     },
   },
   created() {
-    // Realizando la petición de los productos
-    shop.getProducts((products) => {
-      // Comitiando los datos recolectados
-      // store.commit(<mutation>, <payload>)
-      store.commit("setProducts", products);
-    });
+    // El segundo parámetro seria un pay load si
+    // lo hay
+    store.dispatch("fetchProducts");
   },
 };
 </script>
