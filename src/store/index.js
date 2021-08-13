@@ -23,12 +23,16 @@ export default new Vuex.Store({
   },
   actions: {
     // Métodos
-    fetchProducts(context) {
-      // Realizando la petición de los productos
-      shop.getProducts((products) => {
-        // Comitiando los datos recolectados
-        // store.commit(<mutation>, <payload>)
-        context.commit("setProducts", products);
+    fetchProducts({ commit }) {
+      // retornando una promesa
+      return new Promise((resolve, reject) => {
+        // Realizando la petición de los productos
+        shop.getProducts((products) => {
+          // Comitiando los datos recolectados
+          // store.commit(<mutation>, <payload>)
+          commit("setProducts", products);
+          resolve();
+        });
       });
     }
   },

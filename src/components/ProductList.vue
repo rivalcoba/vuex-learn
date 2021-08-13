@@ -1,7 +1,8 @@
 <template>
   <div class="">
     <h1>Product List</h1>
-    <ul>
+    <img v-if="loading" src="https://i.imgur.com/JfPpwOA.gif" alt="spinner" />
+    <ul v-else>
       <li v-for="(product, index) in products" :key="index">
         {{ product.title }} - {{ product.price }}
       </li>
@@ -10,19 +11,28 @@
 </template>
 
 <script>
-// Importando el store
-import store from "@/store/index";
-
 export default {
+  data() {
+    return {
+      loading: false,
+    };
+  },
   computed: {
     products() {
-      return store.getters.availableProducts;
+      return this.$store.getters.availableProducts;
     },
   },
-  created() {
-    // El segundo parámetro seria un pay load si
+  async created() {
+    // Cambiando a cargando
+    this.loading = true;
+    // El segundo parámetro seria un payload si
     // lo hay
-    store.dispatch("fetchProducts");
+    try {
+      await this.$store.dispatch("fetchProducts");
+      this.loading = false;
+    } catch (error) {
+      alert("Error en la carga");
+    }
   },
 };
 </script>
