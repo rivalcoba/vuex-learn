@@ -19,7 +19,7 @@ export default new Vuex.Store({
   },
   getters: {
     // Propiedades computadas
-    availableProducts(state, getters) {
+    availableProducts(state) {
       return state.products.filter((product) => product.inventory > 0);
     }
   },
@@ -27,7 +27,7 @@ export default new Vuex.Store({
     // Métodos
     fetchProducts({ commit }) {
       // retornando una promesa
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         // Realizando la petición de los productos
         shop.getProducts((products) => {
           // Comitiando los datos recolectados
