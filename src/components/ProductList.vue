@@ -5,6 +5,7 @@
     <ul v-else>
       <li v-for="(product, index) in products" :key="index">
         {{ product.title }} - {{ product.price }}
+        <button @click="addProductToCart(product)">Add to cart</button>
       </li>
     </ul>
   </div>
@@ -22,6 +23,12 @@ export default {
       return this.$store.getters.availableProducts;
     },
   },
+  methods: {
+    addProductToCart(product) {
+      // Despachando la acción
+      this.$store.dispatch("addProductToCart", product);
+    },
+  },
   async created() {
     // Cambiando a cargando
     this.loading = true;
@@ -37,5 +44,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+ul li {
+  padding: 10px;
+}
 </style>
