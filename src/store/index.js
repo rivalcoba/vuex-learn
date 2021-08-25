@@ -15,13 +15,35 @@ export default new Vuex.Store({
     // Datos de la app
     products: [],
     // {id, quantity}
-    cart: []
+    cart: [],
   },
   getters: {
     // Propiedades computadas
     availableProducts(state) {
       return state.products.filter((product) => product.inventory > 0);
-    }
+    },
+    cartProducts(state) {
+      // Regresa el arreglo del detalle de elementos
+      // guardados en el carrito
+      return state.cart.map((cartItem) => {
+        const product = state.products.find(
+          (product) => product.id === cartItem.id
+        );
+        // Retornamos y contruimos
+        return {
+          title: product.title,
+          price: product.price,
+          quantity: cartItem.quantity,
+        };
+      });
+    },
+    cartTotal(state, getters) {
+      let total = 0;
+      getters.cartProducts.forEach((product) => {
+        total += product.price * product.quantity;
+      });
+      return total;
+    },
   },
   actions: {
     // Métodos
@@ -59,7 +81,7 @@ export default new Vuex.Store({
         // de los que se tienen disponibles en el inventario
         context.commit("decrementProductInventory", product);
       }
-    }
+    },
   },
   mutations: {
     // Actualiza el estado
@@ -69,7 +91,7 @@ export default new Vuex.Store({
     pushProductToCart(state, productId) {
       state.cart.push({
         id: productId,
-        quantity: 1
+        quantity: 1,
       });
     },
     incrementItemQuantity(state, cartItem) {
@@ -77,6 +99,6 @@ export default new Vuex.Store({
     },
     decrementProductInventory(state, product) {
       product.inventory--;
-    }
-  }
+    },
+  },
 });
