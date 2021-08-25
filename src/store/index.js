@@ -76,7 +76,7 @@ export default new Vuex.Store({
       cartItem.quantity++;
     },
     decrementProductInventory(state, product) {
-      product.quantity--;
+      product.inventory--;
     }
   }
 });
