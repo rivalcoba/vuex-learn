@@ -16,6 +16,7 @@ export default new Vuex.Store({
     products: [],
     // {id, quantity}
     cart: [],
+    checkoutStatus: null,
   },
   getters: {
     // Propiedades computadas
@@ -82,6 +83,22 @@ export default new Vuex.Store({
         context.commit("decrementProductInventory", product);
       }
     },
+    checkout({ commit, state }) {
+      shop.buyProducts(
+        // Proporciono el carrito de compras
+        state.cart,
+        // Callback Succesfully
+        () => {
+          // Comitearemos dos acciones
+          commit("emptyCart");
+          commit("setCheckoutStatus", "success");
+        },
+        // Callback Faill
+        () => {
+          commit("setCheckoutStatus", "fail");
+        }
+      );
+    },
   },
   mutations: {
     // Actualiza el estado
@@ -99,6 +116,12 @@ export default new Vuex.Store({
     },
     decrementProductInventory(state, product) {
       product.inventory--;
+    },
+    setCheckoutStatus(state, status) {
+      state.checkoutStatus = status;
+    },
+    emptyCart(state) {
+      state.cart = [];
     },
   },
 });
