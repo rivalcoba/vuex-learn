@@ -45,6 +45,11 @@ export default new Vuex.Store({
       });
       return total;
     },
+    productIsInStock() {
+      return (product) => {
+        return product.inventory > 0;
+      };
+    },
   },
   actions: {
     // Métodos
@@ -60,10 +65,10 @@ export default new Vuex.Store({
         });
       });
     },
-    addProductToCart(context, product) {
+    addProductToCart({state, getters, commit}, product) {
       // El producto esta en existencia
-      if (product.inventory > 0) {
-        const cartItem = context.state.cart.find(
+      if (getters.productIsInStock(product)) {
+        const cartItem = state.cart.find(
           (item) => item.id === product.id
         );
         // Verificando si el item
@@ -71,16 +76,16 @@ export default new Vuex.Store({
         // en el carrito
         if (!cartItem) {
           // Si no esta se agrega
-          context.commit("pushProductToCart", product.id);
+          commit("pushProductToCart", product.id);
         } else {
           // Si ya esta el item tan solo se incrementa
           // la cantidad
-          context.commit("incrementItemQuantity", cartItem);
+          commit("incrementItemQuantity", cartItem);
         }
         // Esta mutación se agrega cuando
         // se desea cuidar que no se compren mas productos
         // de los que se tienen disponibles en el inventario
-        context.commit("decrementProductInventory", product);
+        commit("decrementProductInventory", product);
       }
     },
     checkout({ commit, state }) {
