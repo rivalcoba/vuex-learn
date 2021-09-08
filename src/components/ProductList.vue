@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -32,14 +32,14 @@ export default {
       products: (state) => state.products,
     }),
     ...mapGetters({
-      productIsInStock: 'productIsInStock'
+      productIsInStock: "productIsInStock",
     }),
   },
   methods: {
-    addProductToCart(product) {
-      // Despachando la acción
-      this.$store.dispatch("addProductToCart", product);
-    },
+    ...mapActions({
+      fetchProducts: "fetchProducts",
+      addProductToCart: 'addProductToCart'
+    }),
   },
   async created() {
     // Cambiando a cargando
@@ -47,7 +47,7 @@ export default {
     // El segundo parámetro seria un payload si
     // lo hay
     try {
-      await this.$store.dispatch("fetchProducts");
+      await this.fetchProducts();
       this.loading = false;
     } catch (error) {
       alert("Error en la carga");
