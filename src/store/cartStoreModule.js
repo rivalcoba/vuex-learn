@@ -4,15 +4,15 @@ import shop from "@/api/shop";
 export default {
   state: {
     // {id, quantity}
-    cart: [],
+    items: [],
     checkoutStatus: null,
   },
   getters: {
-    cartProducts(state) {
+    cartProducts(state, getters, rootState) {
       // Regresa el arreglo del detalle de elementos
       // guardados en el carrito
-      return state.cart.map((cartItem) => {
-        const product = state.products.find(
+      return state.items.map((cartItem) => {
+        const product = rootState.products.items.find(
           (product) => product.id === cartItem.id
         );
         // Retornamos y contruimos
@@ -35,7 +35,7 @@ export default {
     addProductToCart({ state, getters, commit }, product) {
       // El producto esta en existencia
       if (getters.productIsInStock(product)) {
-        const cartItem = state.cart.find((item) => item.id === product.id);
+        const cartItem = state.items.find((item) => item.id === product.id);
         // Verificando si el item
         // que se desea agregar no esta
         // en el carrito
@@ -56,7 +56,7 @@ export default {
     checkout({ commit, state }) {
       shop.buyProducts(
         // Proporciono el carrito de compras
-        state.cart,
+        state.items,
         // Callback Succesfully
         () => {
           // Comitearemos dos acciones
@@ -72,7 +72,7 @@ export default {
   },
   mutations: {
     pushProductToCart(state, productId) {
-      state.cart.push({
+      state.items.push({
         id: productId,
         quantity: 1,
       });
@@ -84,7 +84,7 @@ export default {
       state.checkoutStatus = status;
     },
     emptyCart(state) {
-      state.cart = [];
+      state.items = [];
     },
   },
 };
