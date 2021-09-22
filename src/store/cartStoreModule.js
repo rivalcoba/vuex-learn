@@ -2,6 +2,7 @@
 import shop from "@/api/shop";
 
 export default {
+  namespaced: true,
   state: {
     // {id, quantity}
     items: [],
@@ -32,9 +33,10 @@ export default {
     },
   },
   actions: {
-    addProductToCart({ state, getters, commit }, product) {
+    // eslint-disable-next-line no-unused-vars
+    addProductToCart({ state, getters, commit, rootGetters }, product) {
       // El producto esta en existencia
-      if (getters.productIsInStock(product)) {
+      if (rootGetters["products/productIsInStock"](product)) {
         const cartItem = state.items.find((item) => item.id === product.id);
         // Verificando si el item
         // que se desea agregar no esta
@@ -50,7 +52,7 @@ export default {
         // Esta mutación se agrega cuando
         // se desea cuidar que no se compren mas productos
         // de los que se tienen disponibles en el inventario
-        commit("decrementProductInventory", product);
+        commit("products/decrementProductInventory", product, { root: true });
       }
     },
     checkout({ commit, state }) {
